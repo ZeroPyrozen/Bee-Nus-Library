@@ -13,6 +13,7 @@ struct Shelf
 	char bookPublisher[40];
 	char bookDescription[100];
 	int bookYear;
+	int bookQuantity;
 	bool isAvailable;
 	struct Shelf *left, *right;
 }*root = NULL;
@@ -30,6 +31,12 @@ void titleScreen()
 	printf("\n");
 	printf("\n");
 }
+
+void insertNodeTree(struct Shelf** node)
+{
+
+}
+
 void adminMenu()
 {
 	int menu;
@@ -37,17 +44,47 @@ void adminMenu()
 	{
 		system("cls");
 		spacing();
-		printf("\t\t[Logged in as Admin]\n\n1. Insert New Book\n2. Search Book\n3. ");
+		printf("\t\t[Logged in as Admin]\n\n1. Search Book\n2. Insert New Book\n3. Update Book Information\n4. Remove Book from Database\n0. Exit\nChoose [0..4]: ");
 		scanf("%d", &menu);
+		fflush(stdin);
 		switch (menu)
 		{
 		case 1:
 			break;
 		case 2:
 			break;
+		case 3:
+			break;
+		case 4:
+			break;
+		case 0:
+			break;
 		}
 	} while (menu != 0);
+}
 
+void userMenu()
+{
+	int menu;
+	do
+	{
+		system("cls");
+		spacing();
+		printf("\t\t[Logged in as User]\n\n1. Search Book\n2. Borrow a Book\n3. Return a Book\nChoose[0..3]: ");
+		scanf("%d", &menu);
+		fflush(stdin);
+		switch (menu)
+		{
+		case 1:
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		case 0:
+			break;
+		}
+	} while (menu != 0);
 }
 int main()
 {
@@ -64,8 +101,10 @@ int main()
 		switch (menu)
 		{
 		case 1:
+			adminMenu();
 			break;
 		case 2:
+			userMenu();
 			break;
 		}
 	} while (menu != 3);
