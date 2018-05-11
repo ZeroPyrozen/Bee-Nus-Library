@@ -62,7 +62,7 @@ void adminMenu()
 		spacing();
 		printf("\t\t[Logged in as Admin]\n\n1. Search Book\n2. Insert New Book\n3. Update Book Information\n4. Remove Book from Database\n0. Exit\nChoose [0..4]: ");
 		scanf("%d", &menu);
-		fflush(stdin);
+		rewind(stdin);
 		switch (menu)
 		{
 		case 1:
@@ -86,9 +86,9 @@ void userMenu()
 	{
 		system("cls");
 		spacing();
-		printf("\t\t[Logged in as User]\n\n1. Search Book\n2. Borrow a Book\n3. Return a Book\nChoose[0..3]: ");
+		printf("\t\t[Logged in as User]\n\n1. Search Book\n2. Borrow a Book\n3. Return a Book\n0. Exit to Main Menu\nChoose[0..3]: ");
 		scanf("%d", &menu);
-		fflush(stdin);
+		rewind(stdin);
 		switch (menu)
 		{
 		case 1:
@@ -105,6 +105,8 @@ void userMenu()
 int main()
 {
 	int menu;
+	char loginAdmin[100];
+	char loginPass[100];
 	titleScreen();
 	getchar();
 	do
@@ -113,11 +115,37 @@ int main()
 		spacing();
 		printf("\t\t[BeeNUS Library]\n\n1. Login as Admin\n2. Login as User\n3. Exit\nChoose [1..3]: ");
 		scanf("%d", &menu);
-		fflush(stdin);
+		rewind(stdin);
+		//rewind(stdin);
 		switch (menu)
 		{
 		case 1:
-			adminMenu();
+			strcpy(loginAdmin, "");
+			strcpy(loginPass, "");
+			do
+			{
+				printf("Insert ID : ");
+				scanf("%[^\n]", &loginAdmin);
+				rewind(stdin);
+			} while (strlen(loginAdmin) < 1);
+			do
+			{
+				printf("Insert Password : ");
+				scanf("%[^\n]", loginPass);
+				rewind(stdin);
+			} while (strlen(loginPass) < 1);
+			if (strcmp(loginAdmin, "Admin") == 0 && strcmp(loginPass, "Admin") == 0)
+			{
+				printf("Welcome Admin!\n");
+				Sleep(1000);
+				adminMenu();
+			}
+			else
+			{
+				printf("Wrong Password and/or ID.\nPress \"Enter to Continue\"...");
+				getchar();
+			}
+				
 			break;
 		case 2:
 			userMenu();
