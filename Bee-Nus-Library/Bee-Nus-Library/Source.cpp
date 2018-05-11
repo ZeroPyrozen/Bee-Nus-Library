@@ -25,16 +25,32 @@ void spacing()
 }
 void titleScreen()
 {
-	printf("____  _____  _____  __  __ __ __   __   __    __ ____  _____   ___  _____ _  _\n");
-	printf("||=)  ||==   ||==   ||\\ || || ||  ((    ||    || ||=)  ||_//  ||=|| ||_// \\\\// \n");
-	printf("||_)) ||___  ||___  || \\|| \\\\_// \\_))   ||__| || ||_)) || \\\\  || || || \\\\  //  \n");
+	printf("\n\n\n\t\t\t____  _____  _____  __  __ __ __   __   __    __ ____  _____   ___  _____ _  _\n");
+	printf("\t\t\t||=)  ||==   ||==   ||\\ || || ||  ((    ||    || ||=)  ||_//  ||=|| ||_// \\\\// \n");
+	printf("\t\t\t||_)) ||___  ||___  || \\|| \\\\_// \\_))   ||__| || ||_)) || \\\\  || || || \\\\  //  \n");
 	printf("\n");
-	printf("\n");
+	printf("\t\t\t\t\t\tPress \"Enter\" to Continue...\n");
 }
 
-void insertNodeTree(struct Shelf** node)
+void insertNodeTree(struct Shelf** node,char bookTitle[],char bookAuthor[], char bookISBN[], char bookPublisher[], char bookDescription[], int bookYear,int bookQuantity, bool isAvailable)
 {
-
+	if (node == NULL)
+	{
+		*node = (struct Shelf*)malloc(sizeof(struct Shelf));
+		(*node)->left = (*node)->right = NULL;
+		strcpy((*node)->bookTitle, bookTitle);
+		strcpy((*node)->bookAuthor, bookAuthor);
+		strcpy((*node)->bookISBN, bookISBN);
+		strcpy((*node)->bookPublisher, bookPublisher);
+		strcpy((*node)->bookDescription, bookDescription);
+		(*node)->bookYear = bookYear;
+		(*node)->bookQuantity = bookQuantity;
+		(*node)->isAvailable = isAvailable;
+	}
+	else if (strcmp(bookISBN, (*node)->bookISBN) < 0)
+		insertNodeTree(&(*node)->left, bookTitle, bookAuthor, bookISBN, bookPublisher, bookDescription, bookYear, bookQuantity, isAvailable);
+	else if (strcmp(bookISBN, (*node)->bookISBN) > 0)
+		insertNodeTree(&(*node)->right, bookTitle, bookAuthor, bookISBN, bookPublisher, bookDescription, bookYear, bookQuantity, isAvailable);
 }
 
 void adminMenu()
