@@ -1,2 +1,8 @@
 ﻿  Source.cpp
+c:\users\user\documents\github\bee-nus-library\bee-nus-library\bee-nus-library\source.cpp(73): warning C4101: 'bookYear': unreferenced local variable
+c:\users\user\documents\github\bee-nus-library\bee-nus-library\bee-nus-library\source.cpp(71): warning C4101: 'bookPublisher': unreferenced local variable
+c:\users\user\documents\github\bee-nus-library\bee-nus-library\bee-nus-library\source.cpp(76): warning C4101: 'isAvailable': unreferenced local variable
+c:\users\user\documents\github\bee-nus-library\bee-nus-library\bee-nus-library\source.cpp(74): warning C4101: 'bookQuantity': unreferenced local variable
+c:\users\user\documents\github\bee-nus-library\bee-nus-library\bee-nus-library\source.cpp(72): warning C4101: 'bookDescription': unreferenced local variable
+c:\users\user\documents\github\bee-nus-library\bee-nus-library\bee-nus-library\source.cpp(65): warning C4715: 'searchNode': not all control paths return a value
   Bee-Nus-Library.vcxproj -> C:\Users\USER\Documents\GitHub\Bee-Nus-Library\Bee-Nus-Library\Debug\Bee-Nus-Library.exe

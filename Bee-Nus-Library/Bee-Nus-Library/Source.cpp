@@ -9,7 +9,7 @@ struct Shelf
 {
 	char bookTitle[40];
 	char bookAuthor[40];
-	char bookISBN[30];
+	char bookISBN[40];
 	char bookPublisher[40];
 	char bookDescription[100];
 	int bookYear;
@@ -52,7 +52,74 @@ void insertNodeTree(struct Shelf** node,char bookTitle[],char bookAuthor[], char
 	else if (strcmp(bookISBN, (*node)->bookISBN) > 0)
 		insertNodeTree(&(*node)->right, bookTitle, bookAuthor, bookISBN, bookPublisher, bookDescription, bookYear, bookQuantity, isAvailable);
 }
+struct Shelf* searchNode(struct Shelf**temp, char bookISBN[])
+{
+	if (*temp == NULL)
+		return NULL;
+	else if (strcmp((*temp)->bookISBN, bookISBN) == 0)
+		return *temp;
+	else if (strcmp(bookISBN, (*temp)->bookISBN) < 0)
+		searchNode(&(*temp)->left, bookISBN);
+	else if (strcmp(bookISBN, (*temp)->bookISBN) > 0)
+		searchNode(&(*temp)->right, bookISBN);
+}
+void addNewBook()
+{
+	char bookTitle[100];
+	char bookAuthor[100];
+	char bookISBN[100];
+	char bookPublisher[100];
+	char bookDescription[100];
+	int bookYear;
+	int bookQuantity;
+	int flag,i,length;
+	bool isAvailable;
+	do
+	{
+		printf("Insert Book Title [Max 40 Chars]: ");
+		scanf("%[^\n]", &bookTitle);
+		rewind(stdin);
+	} while (strlen(bookTitle) < 1||strlen(bookTitle)>40);
+	do
+	{
+		printf("Insert Book Author\'s Name [Max 40 Chars]: ");
+		scanf("%[^\n]", &bookAuthor);
+		rewind(stdin);
+	} while (strlen(bookAuthor) < 1 || strlen(bookAuthor) > 40);
+	do
+	{
+		flag = 0;
+		scanf("%s", &bookISBN);
+		rewind(stdin);
+		if (strlen(bookISBN) != 10 && strlen(bookISBN) != 13)
+			flag = 0;
+		else
+		{
+			flag = 1;
+			if (searchNode(&root, bookISBN) == NULL)
+			{
+				length = strlen(bookISBN);
+				for (i = 0; i < length; i++)
+				{
+					if (!isdigit(bookISBN[i]))
+					{
+						flag = 0;
+						break;
+					}
+				}
+			}
+			else
+			{
+				//Error Message
+				flag = 0;
+			}
+		}
+	} while (flag==0);
+	do
+	{
 
+	} while (flag == 0);
+}
 void adminMenu()
 {
 	int menu;
