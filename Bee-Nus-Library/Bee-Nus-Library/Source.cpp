@@ -237,7 +237,7 @@ void searchByISBN()
 	}
 }
 
-void traverseTree(struct Shelf** temp, int counter)
+void traverseTree(struct Shelf** temp, int counter) //In Order Traverse Sequence
 {
 	if (*temp == NULL)
 		return;
@@ -264,10 +264,10 @@ void traverseTree(struct Shelf** temp, int counter)
 void printAll()
 {
 	int i = 0;
-	if (root == NULL)
+	if (root == NULL) //No Tree
 		printf("There is No Data!\nPress \"Enter\" to Continue...");
 	else
-		traverseTree(&root, i);
+		traverseTree(&root, i); //Traverse All Node in Tree
 	getchar();
 
 }
@@ -306,6 +306,7 @@ void adminMenu()
 void userMenu()
 {
 	int menu;
+	//User Menu Loop
 	do
 	{
 		system("cls");
@@ -316,12 +317,16 @@ void userMenu()
 		switch (menu)
 		{
 		case 1:
+			//Search Book
 			break;
 		case 2:
+			//Borrow Book
 			break;
 		case 3:
+			//Return Book
 			break;
 		case 0:
+			//Exit to Main Menu
 			break;
 		}
 	} while (menu != 0);
@@ -330,9 +335,11 @@ int main()
 {
 	int menu;
 	char loginAdmin[100];
-	char loginPass[100];
+	char loginPass[100]; 
+	//Show Application Title
 	titleScreen();
 	getchar();
+	//Main Menu Loop
 	do
 	{
 		system("cls");
@@ -344,8 +351,10 @@ int main()
 		switch (menu)
 		{
 		case 1:
+			//Login as Admin
 			strcpy(loginAdmin, "");
 			strcpy(loginPass, "");
+			//Login Validation
 			do
 			{
 				printf("Insert ID : ");
@@ -362,16 +371,18 @@ int main()
 			{
 				printf("Welcome Admin!\n");
 				Sleep(1000);
+				//Enter to Admin Menu
 				adminMenu();
 			}
 			else
 			{
 				printf("Wrong Password and/or ID.\nPress \"Enter to Continue\"...");
 				getchar();
+				//Return to Main Menu
 			}
-
 			break;
 		case 2:
+			//Login as User - Enter to User Main Menu
 			userMenu();
 			break;
 		}
