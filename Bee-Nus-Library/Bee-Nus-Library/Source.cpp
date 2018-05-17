@@ -17,6 +17,7 @@ struct Shelf
 	bool isAvailable;
 	struct Shelf *left, *right;
 }*root = NULL;
+//Appearance Plugin
 void spacing()
 {
 	int i;
@@ -31,6 +32,7 @@ void titleScreen()
 	printf("\n");
 	printf("\t\t\t\t\t\tPress \"Enter\" to Continue...\n");
 }
+
 
 void insertNodeTree(struct Shelf** node, char bookTitle[], char bookAuthor[], char bookISBN[], char bookPublisher[], char bookDescription[], int bookYear, int bookQuantity, bool isAvailable)
 {
@@ -279,7 +281,7 @@ void adminMenu()
 	{
 		system("cls");
 		spacing();
-		printf("\t\t[Logged in as Admin]\n\n1. Search Book\n2. Insert New Book\n3. Update Book Information\n4. Remove Book from Database\n5. View All Book[Debug]\n0. Exit\nChoose [0..4]: ");
+		printf("\t\t[Logged in as Admin]\n\n1. Search Book\n2. Insert New Book\n3. Update Book Information\n4. Remove Book from Database\n5. View All Book [Debug]\n6. Search Comparison [Debug]\n0. Exit\nChoose [0..4]: ");
 		scanf("%d", &menu);
 		rewind(stdin);
 		switch (menu)
@@ -298,6 +300,7 @@ void adminMenu()
 			printAll();
 			break;
 		case 0:
+
 			break;
 		}
 	} while (menu != 0);
@@ -333,7 +336,7 @@ void userMenu()
 }
 int main()
 {
-	int menu;
+	int menu; //Menu Navigation
 	char loginAdmin[100];
 	char loginPass[100]; 
 	//Show Application Title
@@ -347,7 +350,6 @@ int main()
 		printf("\t\t[BeeNUS Library]\n\n1. Login as Admin\n2. Login as User\n3. Exit\nChoose [1..3]: ");
 		scanf("%d", &menu);
 		rewind(stdin);
-		//rewind(stdin);
 		switch (menu)
 		{
 		case 1:
