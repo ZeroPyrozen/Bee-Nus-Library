@@ -15,9 +15,11 @@ struct Shelf
 	int bookYear;
 	int bookQuantity;
 	bool isAvailable;
-	struct Shelf *leftBST, *rightBST;
-}*rootBST = NULL;
-//Appearance Plugin
+	struct Shelf *nextPT, *prevPT; //For Linked List Push Tail Only
+	struct Shelf *nextPQ, *prevPQ; //For Linked List Priority Queue
+	struct Shelf *leftBST, *rightBST; //For Binary Search Tree
+}*rootBST = NULL,*headPQ=NULL,*tailPQ=NULL,*headPT=NULL,*tailPT=NULL;
+//Appearance
 void spacing()
 {
 	int i;
@@ -33,11 +35,13 @@ void titleScreen()
 	printf("\t\t\t\t\t\tPress \"Enter\" to Continue...\n");
 }
 
-
+//Insertion Logic
+//Binary Search Tree
 void insertNodeBST(struct Shelf** node, char bookTitle[], char bookAuthor[], char bookISBN[], char bookPublisher[], char bookDescription[], int bookYear, int bookQuantity, bool isAvailable)
 {
 	if (*node == NULL)
 	{
+		//Node Initialization
 		*node = (struct Shelf*)malloc(sizeof(struct Shelf));
 		(*node)->leftBST = (*node)->rightBST = NULL;
 		strcpy((*node)->bookTitle, bookTitle);
@@ -54,6 +58,102 @@ void insertNodeBST(struct Shelf** node, char bookTitle[], char bookAuthor[], cha
 	else if (strcmp(bookISBN, (*node)->bookISBN) > 0)
 		insertNodeBST(&(*node)->rightBST, bookTitle, bookAuthor, bookISBN, bookPublisher, bookDescription, bookYear, bookQuantity, isAvailable);
 }
+
+//Linked List Push Tail Only
+struct Shelf* insertNodePushTail(char bookTitle[], char bookAuthor[], char bookISBN[], char bookPublisher[], char bookDescription[], int bookYear, int bookQuantity, bool isAvailable)
+{
+	//Node Initialization
+	struct Shelf *node = (struct Shelf*)malloc(sizeof(struct Shelf));
+	node->nextPT = node->prevPT = NULL;
+	strcpy(node->bookTitle, bookTitle);
+	strcpy(node->bookAuthor, bookAuthor);
+	strcpy(node->bookISBN, bookISBN);
+	strcpy(node->bookPublisher, bookPublisher);
+	strcpy(node->bookDescription, bookDescription);
+	node->bookYear = bookYear;
+	node->bookQuantity = bookQuantity;
+	node->isAvailable = isAvailable;
+	//Node Insertion
+	if (headPT == NULL)
+	{
+		headPT = tailPT = node;
+		headPT->prevPT = tailPT->nextPT = NULL;
+	}
+	else
+	{
+		tailPT->nextPT = node;
+		node->prevPT = tailPT;
+		tailPT = node;
+		tailPT->nextPT = NULL;
+	}
+	return node;
+}
+
+//Linked List Priority Queue
+struct Shelf* insertNodePushPriority(char bookTitle[], char bookAuthor[], char bookISBN[], char bookPublisher[], char bookDescription[], int bookYear, int bookQuantity, bool isAvailable)
+{
+	//Node Initialization
+	struct Shelf *swap;
+	struct Shelf *node = (struct Shelf*)malloc(sizeof(struct Shelf));
+	node->nextPQ = node->prevPQ = NULL;
+	strcpy(node->bookTitle, bookTitle);
+	strcpy(node->bookAuthor, bookAuthor);
+	strcpy(node->bookISBN, bookISBN);
+	strcpy(node->bookPublisher, bookPublisher);
+	strcpy(node->bookDescription, bookDescription);
+	node->bookYear = bookYear;
+	node->bookQuantity = bookQuantity;
+	node->isAvailable = isAvailable;
+	//Node Insertion
+	if (headPQ == NULL) //There is No Linked List
+	{
+		headPQ = tailPQ = node;
+		headPQ->prevPQ = tailPQ->nextPQ = NULL;
+	}
+	else
+	{
+		if (strcmp(headPQ->bookISBN, node->bookISBN) > 0) //Push Head
+		{
+			headPQ->prevPQ = node;
+			node->nextPQ = headPQ;
+			headPQ = node;
+			headPQ->prevPQ = NULL;
+		}
+		else if (strcmp(tailPQ->bookISBN, node->bookISBN) < 0) //Push Tail
+		{
+			tailPQ->nextPQ = node;
+			node->prevPQ = tailPQ;
+			tailPQ = node;
+			tailPQ->nextPQ = NULL;
+		}
+		else //Push Mid
+		{
+			swap = headPQ; //Initialize Temporal Varible
+			while (swap != NULL) //Traverse All Node in Linked List
+			{
+				if (strcmp(swap->bookISBN, node->bookISBN) > 0)
+					break;
+				swap = swap->nextPQ;
+			}
+			//Swapping
+			swap->prevPQ->nextPQ = node;
+			node->prevPQ = swap->prevPQ;
+			swap->prevPQ = node;
+			node->nextPQ = swap;
+		}
+	}
+	return node;
+}
+
+//AVL Tree
+struct Shelf* insertNodeAVLTree(struct Shelf** node, char bookTitle[], char bookAuthor[], char bookISBN[], char bookPublisher[], char bookDescription[], int bookYear, int bookQuantity, bool isAvailable)
+{
+	
+
+	return *node;
+}
+
+//Search Logic
 struct Shelf* searchNode(struct Shelf**temp, char bookISBN[])
 {
 	if (*temp == NULL)
@@ -180,6 +280,8 @@ void addNewBook()
 	} while (flag == 0);
 	isAvailable = true;
 	insertNodeBST(&rootBST, bookTitle, bookAuthor, bookISBN, bookPublisher, bookDescription, bookYear, bookQuantity, isAvailable);
+	insertNodePushTail(bookTitle, bookAuthor, bookISBN, bookPublisher, bookDescription, bookYear, bookQuantity, isAvailable);
+	insertNodePushPriority(bookTitle, bookAuthor, bookISBN, bookPublisher, bookDescription, bookYear, bookQuantity, isAvailable);
 	printf("\n\nSuccessfully Insert New Book!\n\nPress \"Enter\" to Continue...\n");
 	getchar();
 }
