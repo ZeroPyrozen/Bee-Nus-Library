@@ -148,7 +148,9 @@ struct Shelf* insertNodePushPriority(char bookTitle[], char bookAuthor[], char b
 //AVL Tree
 struct Shelf* insertNodeAVLTree(struct Shelf** node, char bookTitle[], char bookAuthor[], char bookISBN[], char bookPublisher[], char bookDescription[], int bookYear, int bookQuantity, bool isAvailable)
 {
-	
+	//Insertion
+
+	//Balancing
 
 	return *node;
 }
