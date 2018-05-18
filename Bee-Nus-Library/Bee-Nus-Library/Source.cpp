@@ -15,8 +15,8 @@ struct Shelf
 	int bookYear;
 	int bookQuantity;
 	bool isAvailable;
-	struct Shelf *left, *right;
-}*root = NULL;
+	struct Shelf *leftBST, *rightBST;
+}*rootBST = NULL;
 //Appearance Plugin
 void spacing()
 {
@@ -34,12 +34,12 @@ void titleScreen()
 }
 
 
-void insertNodeTree(struct Shelf** node, char bookTitle[], char bookAuthor[], char bookISBN[], char bookPublisher[], char bookDescription[], int bookYear, int bookQuantity, bool isAvailable)
+void insertNodeBST(struct Shelf** node, char bookTitle[], char bookAuthor[], char bookISBN[], char bookPublisher[], char bookDescription[], int bookYear, int bookQuantity, bool isAvailable)
 {
 	if (*node == NULL)
 	{
 		*node = (struct Shelf*)malloc(sizeof(struct Shelf));
-		(*node)->left = (*node)->right = NULL;
+		(*node)->leftBST = (*node)->rightBST = NULL;
 		strcpy((*node)->bookTitle, bookTitle);
 		strcpy((*node)->bookAuthor, bookAuthor);
 		strcpy((*node)->bookISBN, bookISBN);
@@ -50,9 +50,9 @@ void insertNodeTree(struct Shelf** node, char bookTitle[], char bookAuthor[], ch
 		(*node)->isAvailable = isAvailable;
 	}
 	else if (strcmp(bookISBN, (*node)->bookISBN) < 0)
-		insertNodeTree(&(*node)->left, bookTitle, bookAuthor, bookISBN, bookPublisher, bookDescription, bookYear, bookQuantity, isAvailable);
+		insertNodeBST(&(*node)->leftBST, bookTitle, bookAuthor, bookISBN, bookPublisher, bookDescription, bookYear, bookQuantity, isAvailable);
 	else if (strcmp(bookISBN, (*node)->bookISBN) > 0)
-		insertNodeTree(&(*node)->right, bookTitle, bookAuthor, bookISBN, bookPublisher, bookDescription, bookYear, bookQuantity, isAvailable);
+		insertNodeBST(&(*node)->rightBST, bookTitle, bookAuthor, bookISBN, bookPublisher, bookDescription, bookYear, bookQuantity, isAvailable);
 }
 struct Shelf* searchNode(struct Shelf**temp, char bookISBN[])
 {
@@ -61,9 +61,9 @@ struct Shelf* searchNode(struct Shelf**temp, char bookISBN[])
 	else if (strcmp((*temp)->bookISBN, bookISBN) == 0)
 		return *temp;
 	else if (strcmp(bookISBN, (*temp)->bookISBN) < 0)
-		searchNode(&(*temp)->left, bookISBN);
+		searchNode(&(*temp)->leftBST, bookISBN);
 	else if (strcmp(bookISBN, (*temp)->bookISBN) > 0)
-		searchNode(&(*temp)->right, bookISBN);
+		searchNode(&(*temp)->rightBST, bookISBN);
 }
 void addNewBook()
 {
@@ -114,7 +114,7 @@ void addNewBook()
 		else
 		{
 			flag = 1;
-			if (searchNode(&root, bookISBN) == NULL)
+			if (searchNode(&rootBST, bookISBN) == NULL)
 			{
 				length = strlen(bookISBN);
 				for (i = 0; i < length; i++)
@@ -179,7 +179,7 @@ void addNewBook()
 			flag = 1;
 	} while (flag == 0);
 	isAvailable = true;
-	insertNodeTree(&root, bookTitle, bookAuthor, bookISBN, bookPublisher, bookDescription, bookYear, bookQuantity, isAvailable);
+	insertNodeBST(&rootBST, bookTitle, bookAuthor, bookISBN, bookPublisher, bookDescription, bookYear, bookQuantity, isAvailable);
 	printf("\n\nSuccessfully Insert New Book!\n\nPress \"Enter\" to Continue...\n");
 	getchar();
 }
@@ -218,7 +218,7 @@ void searchByISBN()
 	}
 	else
 	{
-		temp = searchNode(&root, bookISBN);
+		temp = searchNode(&rootBST, bookISBN);
 		printf("\t\t\t[Search Result]\n");
 		if (temp == NULL)
 			printf("Nothing Found!\nReturning to Admin Menu...\n\nPress \"Enter\" to Continue");
@@ -239,11 +239,11 @@ void searchByISBN()
 	}
 }
 
-void traverseTree(struct Shelf** temp, int counter) //In Order Traverse Sequence
+void traverseBST(struct Shelf** temp, int counter) //In Order Traverse Sequence
 {
 	if (*temp == NULL)
 		return;
-	traverseTree(&(*temp)->left, counter);
+	traverseBST(&(*temp)->leftBST, counter);
 	printf("Title				: %s\n", (*temp)->bookTitle);
 	printf("Author				: %s\n", (*temp)->bookAuthor);
 	printf("ISBN				: %s\n", (*temp)->bookISBN);
@@ -260,18 +260,18 @@ void traverseTree(struct Shelf** temp, int counter) //In Order Traverse Sequence
 		getchar();
 	}
 	counter++;
-	traverseTree(&(*temp)->left, counter);
+	traverseBST(&(*temp)->leftBST, counter);
 }
 
 void printAll()
 {
 	int i = 0;
-	if (root == NULL) //No Tree
+	if (rootBST == NULL) //No Tree
 		printf("There is No Data!\nPress \"Enter\" to Continue...");
 	else
-		traverseTree(&root, i); //Traverse All Node in Tree
+		traverseBST(&rootBST, i); //Traverse All Node in Tree
+	printf("Done Traversing All Node!\nPress \"Enter\" to Continue...\n");
 	getchar();
-
 }
 
 void adminMenu()
@@ -299,8 +299,9 @@ void adminMenu()
 		case 5:
 			printAll();
 			break;
+		case 6:
+			break;
 		case 0:
-
 			break;
 		}
 	} while (menu != 0);
