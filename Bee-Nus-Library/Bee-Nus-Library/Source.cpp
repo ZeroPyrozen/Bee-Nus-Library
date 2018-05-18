@@ -4,7 +4,7 @@
 #include<string.h>
 #include<ctype.h>
 #include<Windows.h>
-
+#include<conio.h>
 struct Shelf
 {
 	char bookTitle[40];
@@ -18,7 +18,8 @@ struct Shelf
 	struct Shelf *nextPT, *prevPT; //For Linked List Push Tail Only
 	struct Shelf *nextPQ, *prevPQ; //For Linked List Priority Queue
 	struct Shelf *leftBST, *rightBST; //For Binary Search Tree
-}*rootBST = NULL,*headPQ=NULL,*tailPQ=NULL,*headPT=NULL,*tailPT=NULL;
+	struct Shelf *leftAVL, *rightAVL; //For AVL Tree
+}*rootBST = NULL,*headPQ=NULL,*tailPQ=NULL,*headPT=NULL,*tailPT=NULL,*rootAVL=NULL;
 //Appearance
 void spacing()
 {
@@ -366,14 +367,71 @@ void traverseBST(struct Shelf** temp, int counter) //In Order Traverse Sequence
 	counter++;
 	traverseBST(&(*temp)->leftBST, counter);
 }
+void traverseLinkedList()
+{
+	char navigation; //View Navigation
+	int counter;
+	bool isDone;
+	struct Shelf *temp;
+	isDone = false;
+	temp = headPQ; //Initialization
+	do
+	{
+		system("cls");
+		spacing();
+		for (counter = 0; counter < 5; counter++)
+		{
+			printf("Title				: %s\n", temp->bookTitle);
+			printf("Author				: %s\n", temp->bookAuthor);
+			printf("ISBN				: %s\n", temp->bookISBN);
+			printf("Publisher			: %s\n", temp->bookPublisher);
+			printf("Description			: \n\n");
+			showDescription(temp->bookDescription);
+			printf("\nPublished Year	: %d\n", temp->bookYear);
+			printf("Book Quantity		: %d\n", temp->bookQuantity);
+			printf("Status				: %s\n", temp->isAvailable ? "Available" : "Borrowed");
+			if (temp != NULL)
+				temp = temp->nextPQ;
+			else
+			{
+				isDone = true;
+				break;
+			}
+		}
+		if(isDone!=true)
+		{
+			printf("[<-Previous Page]||[Next Page->]\n");
+			navigation = _getch();
+			rewind(stdin);
+			switch (navigation)
+			{
+			case 'a':
+				break;
+			case 'A':
+				break;
+			case 'd':
+				break;
+			case 'D':
+				break;
 
+			}
+		}
+	} while (isDone == false);
+}
 void printAll()
 {
 	int i = 0;
-	if (rootBST == NULL) //No Tree
+	//if (rootBST == NULL) //No Tree
+	//	printf("There is No Data!\nPress \"Enter\" to Continue...");
+	//else
+	//{
+
+	//	traverseBST(&rootBST, i); //Traverse All Node in Tree
+	//}
+	if (headPQ == NULL)
 		printf("There is No Data!\nPress \"Enter\" to Continue...");
 	else
-		traverseBST(&rootBST, i); //Traverse All Node in Tree
+		traverseLinkedList();
 	printf("Done Traversing All Node!\nPress \"Enter\" to Continue...\n");
 	getchar();
 }
