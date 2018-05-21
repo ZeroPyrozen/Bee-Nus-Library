@@ -375,11 +375,12 @@ void traverseLinkedList()
 	struct Shelf *temp;
 	isDone = false;
 	temp = headPQ; //Initialization
+	navigation = 39;
 	do
 	{
 		system("cls");
 		spacing();
-		for (counter = 0; counter < 5; counter++)
+		for (counter = 0; counter < 5 && temp!=NULL; counter++)
 		{
 			printf("Title				: %s\n", temp->bookTitle);
 			printf("Author				: %s\n", temp->bookAuthor);
@@ -390,8 +391,10 @@ void traverseLinkedList()
 			printf("\nPublished Year	: %d\n", temp->bookYear);
 			printf("Book Quantity		: %d\n", temp->bookQuantity);
 			printf("Status				: %s\n", temp->isAvailable ? "Available" : "Borrowed");
-			if (temp != NULL)
+			if (temp != NULL && navigation == 39)
 				temp = temp->nextPQ;
+			else if (temp != NULL && navigation == 37)
+				temp = temp->prevPQ;
 			else
 			{
 				isDone = true;
@@ -400,21 +403,20 @@ void traverseLinkedList()
 		}
 		if(isDone!=true)
 		{
-			printf("[<-Previous Page]||[Next Page->]\n");
+			printf("[<-Previous Page]|[Exit to Menu]|[Next Page->]\n");
 			navigation = _getch();
 			rewind(stdin);
-			switch (navigation)
+			if (navigation != 39 && navigation != 37 && navigation != 27)
 			{
-			case 'a':
-				break;
-			case 'A':
-				break;
-			case 'd':
-				break;
-			case 'D':
-				break;
-
+				printf("Use Escape/Arrow Left/Arrow Right Button to Navigate...\n");
+				Sleep(2000);
 			}
+			else if (navigation == 27)
+				return;
+		}
+		else
+		{
+			printf("Edge of Data");
 		}
 	} while (isDone == false);
 }
@@ -432,7 +434,7 @@ void printAll()
 		printf("There is No Data!\nPress \"Enter\" to Continue...");
 	else
 		traverseLinkedList();
-	printf("Done Traversing All Node!\nPress \"Enter\" to Continue...\n");
+	printf("Press \"Enter\" to Continue...\n");
 	getchar();
 }
 
