@@ -371,54 +371,48 @@ void traverseLinkedList()
 {
 	char navigation; //View Navigation
 	int counter;
-	bool isDone;
 	struct Shelf *temp;
-	isDone = false;
 	temp = headPQ; //Initialization
 	navigation = 39;
 	do
 	{
 		system("cls");
 		spacing();
-		for (counter = 0; counter < 5 && temp!=NULL; counter++)
+		if(navigation==39||navigation==37)
 		{
-			printf("Title				: %s\n", temp->bookTitle);
-			printf("Author				: %s\n", temp->bookAuthor);
-			printf("ISBN				: %s\n", temp->bookISBN);
-			printf("Publisher			: %s\n", temp->bookPublisher);
-			printf("Description			: \n\n");
-			showDescription(temp->bookDescription);
-			printf("\nPublished Year	: %d\n", temp->bookYear);
-			printf("Book Quantity		: %d\n", temp->bookQuantity);
-			printf("Status				: %s\n", temp->isAvailable ? "Available" : "Borrowed");
-			if (temp != NULL && navigation == 39)
-				temp = temp->nextPQ;
-			else if (temp != NULL && navigation == 37)
-				temp = temp->prevPQ;
+			for (counter = 0; counter < 5 && temp != NULL; counter++)
+			{
+				printf("Title				: %s\n", temp->bookTitle);
+				printf("Author				: %s\n", temp->bookAuthor);
+				printf("ISBN				: %s\n", temp->bookISBN);
+				printf("Publisher			: %s\n", temp->bookPublisher);
+				printf("Description			: \n\n");
+				showDescription(temp->bookDescription);
+				printf("\nPublished Year	: %d\n", temp->bookYear);
+				printf("Book Quantity		: %d\n", temp->bookQuantity);
+				printf("Status				: %s\n", temp->isAvailable ? "Available" : "Borrowed");
+				if (navigation == 39)
+					temp = temp->nextPQ;
+				else if (navigation == 37)
+					temp = temp->prevPQ;
+			}
+		}
+		if (temp == NULL)
+		{
+			printf("You Have Reached The End of File!\n");
+			if (navigation == 39)
+				temp = tailPQ;
 			else
-			{
-				isDone = true;
-				break;
-			}
+				temp = headPQ;
 		}
-		if(isDone!=true)
+		printf("[<-Previous Page]|[Exit to Menu]|[Next Page->]\n");
+		navigation = _getch();
+		rewind(stdin);
+		if (navigation != 39 && navigation != 37 && navigation != 27)
 		{
-			printf("[<-Previous Page]|[Exit to Menu]|[Next Page->]\n");
-			navigation = _getch();
-			rewind(stdin);
-			if (navigation != 39 && navigation != 37 && navigation != 27)
-			{
-				printf("Use Escape/Arrow Left/Arrow Right Button to Navigate...\n");
-				Sleep(2000);
-			}
-			else if (navigation == 27)
-				return;
+			printf("Use Escape/Arrow Left/Arrow Right Button to Navigate...\n");
 		}
-		else
-		{
-			printf("Edge of Data");
-		}
-	} while (isDone == false);
+	} while (navigation != 27);
 }
 void printAll()
 {
@@ -434,8 +428,6 @@ void printAll()
 		printf("There is No Data!\nPress \"Enter\" to Continue...");
 	else
 		traverseLinkedList();
-	printf("Press \"Enter\" to Continue...\n");
-	getchar();
 }
 
 void adminMenu()
