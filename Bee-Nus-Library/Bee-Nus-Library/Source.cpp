@@ -373,13 +373,24 @@ void traverseLinkedList()
 	int counter;
 	struct Shelf *temp;
 	temp = headPQ; //Initialization
-	navigation = 39;
+	navigation = 39; //Setting Navigation to Right
 	do
 	{
 		system("cls");
 		spacing();
+		printf("%d\n", navigation);
 		if(navigation==39||navigation==37)
 		{
+			if (temp == NULL) //Reaching the end of Linked List
+			{
+				printf("You Have Reached The End of File!\n");
+				if (navigation == 39)
+				{
+					temp = tailPQ;
+				}
+				else
+					temp = headPQ;
+			}
 			for (counter = 0; counter < 5 && temp != NULL; counter++)
 			{
 				printf("Title				: %s\n", temp->bookTitle);
@@ -397,21 +408,16 @@ void traverseLinkedList()
 					temp = temp->prevPQ;
 			}
 		}
-		if (temp == NULL)
+		do
 		{
-			printf("You Have Reached The End of File!\n");
-			if (navigation == 39)
-				temp = tailPQ;
-			else
-				temp = headPQ;
-		}
-		printf("[<-Previous Page]|[Exit to Menu]|[Next Page->]\n");
-		navigation = _getch();
-		rewind(stdin);
-		if (navigation != 39 && navigation != 37 && navigation != 27)
-		{
-			printf("Use Escape/Arrow Left/Arrow Right Button to Navigate...\n");
-		}
+			printf("[<-Previous Page]|[Exit to Menu]|[Next Page->]\n");
+			navigation = _getch();
+			rewind(stdin);
+			if (navigation != 39 && navigation != 37 && navigation != 27)
+			{
+				printf("Use Escape/Arrow Left/Arrow Right Button to Navigate...\n");
+			}
+		} while (navigation != 39 && navigation != 37 && navigation != 27);
 	} while (navigation != 27);
 }
 void printAll()
