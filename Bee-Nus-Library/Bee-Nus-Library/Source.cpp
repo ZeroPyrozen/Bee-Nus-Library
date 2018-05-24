@@ -373,24 +373,14 @@ void traverseLinkedList()
 	int counter;
 	struct Shelf *temp;
 	temp = headPQ; //Initialization
-	navigation = 39; //Setting Navigation to Right
+	navigation = 77; //Setting Navigation to Right
 	do
 	{
 		system("cls");
 		spacing();
 		printf("%d\n", navigation);
-		if(navigation==39||navigation==37)
+		if(navigation==75||navigation==77)
 		{
-			if (temp == NULL) //Reaching the end of Linked List
-			{
-				printf("You Have Reached The End of File!\n");
-				if (navigation == 39)
-				{
-					temp = tailPQ;
-				}
-				else
-					temp = headPQ;
-			}
 			for (counter = 0; counter < 5 && temp != NULL; counter++)
 			{
 				printf("Title				: %s\n", temp->bookTitle);
@@ -402,10 +392,22 @@ void traverseLinkedList()
 				printf("\nPublished Year	: %d\n", temp->bookYear);
 				printf("Book Quantity		: %d\n", temp->bookQuantity);
 				printf("Status				: %s\n", temp->isAvailable ? "Available" : "Borrowed");
-				if (navigation == 39)
+				if (navigation == 77)
 					temp = temp->nextPQ;
-				else if (navigation == 37)
+				else if (navigation == 75)
 					temp = temp->prevPQ;
+			}
+		}
+		if (temp == NULL) //Reaching the end of Linked List
+		{
+			printf("You Have Reached The End of File!\n");
+			if (navigation == 77)
+			{
+				temp = tailPQ;
+			}
+			else
+			{
+				temp = headPQ;
 			}
 		}
 		do
@@ -413,25 +415,22 @@ void traverseLinkedList()
 			printf("[<-Previous Page]|[Exit to Menu]|[Next Page->]\n");
 			navigation = _getch();
 			rewind(stdin);
-			if (navigation != 39 && navigation != 37 && navigation != 27)
+			if (navigation != 77 && navigation != 75 && navigation != 27)
 			{
 				printf("Use Escape/Arrow Left/Arrow Right Button to Navigate...\n");
 			}
-		} while (navigation != 39 && navigation != 37 && navigation != 27);
+		} while (navigation != 75 && navigation != 77 && navigation != 27);
 	} while (navigation != 27);
 }
+
+
 void printAll()
 {
 	int i = 0;
-	//if (rootBST == NULL) //No Tree
-	//	printf("There is No Data!\nPress \"Enter\" to Continue...");
-	//else
-	//{
-
-	//	traverseBST(&rootBST, i); //Traverse All Node in Tree
-	//}
 	if (headPQ == NULL)
+	{
 		printf("There is No Data!\nPress \"Enter\" to Continue...");
+	}
 	else
 		traverseLinkedList();
 }
