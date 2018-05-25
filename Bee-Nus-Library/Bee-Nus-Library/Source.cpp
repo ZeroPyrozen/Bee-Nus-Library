@@ -15,6 +15,7 @@ struct Shelf
 	int bookYear;
 	int bookQuantity;
 	bool isAvailable;
+	int height;
 	struct Shelf *nextPT, *prevPT; //For Linked List Push Tail Only
 	struct Shelf *nextPQ, *prevPQ; //For Linked List Priority Queue
 	struct Shelf *leftBST, *rightBST; //For Binary Search Tree
@@ -147,12 +148,77 @@ struct Shelf* insertNodePushPriority(char bookTitle[], char bookAuthor[], char b
 }
 
 //AVL Tree
+//Choosing Maximum Value
+int maxAVL(int a, int b)
+{
+	return (a > b) ? a : b;
+}
+//Calculating Height of the Tree
+int heightAVL(struct Shelf *node)
+{
+	if (node == NULL)
+		return 0;
+	return node->height;
+}
+//Right Rotation
+struct Shelf *rightRotate(struct Shelf *b)
+{
+	//Initialization
+	struct Shelf *a = b->leftAVL;
+	struct Shelf *temp = a->rightAVL;
+	//Rotation
+	a->rightAVL = b;
+	b->leftAVL = temp;
+	//Update Height (Farthest Node)
+	b->height = maxAVL(heightAVL(b->leftAVL), heightAVL(b->rightAVL)) + 1;
+	a->height = maxAVL(heightAVL(a->leftAVL), heightAVL(a->rightAVL)) + 1;
+	return a;
+}
+//Left Rotation
+struct Shelf *leftRotate(struct Shelf *a)
+{
+	//Initialization
+	struct Shelf *b = a->rightAVL;
+	struct Shelf *temp = b->leftAVL;
+	//Rotation
+	b->leftAVL = a;
+	a->rightAVL = temp;
+	//Update Height (Farthest Node)
+	b->height = maxAVL(heightAVL(b->leftAVL), heightAVL(b->rightAVL)) + 1;
+	a->height = maxAVL(heightAVL(a->leftAVL), heightAVL(a->rightAVL)) + 1;
+	return b;
+}
+//Calculating Balance Factor
+int balanceFactor(struct Shelf *x)
+{
+	if (x == NULL)
+		return 0;
+	return heightAVL(x->leftAVL) - height(x->rightAVL);
+}
 struct Shelf* insertNodeAVLTree(struct Shelf** node, char bookTitle[], char bookAuthor[], char bookISBN[], char bookPublisher[], char bookDescription[], int bookYear, int bookQuantity, bool isAvailable)
 {
+	int balance; //Balance Factor
 	//Insertion
-
+	if (*node == NULL)
+	{
+		//Node Initialization
+		*node = (struct Shelf*)malloc(sizeof(struct Shelf));
+		(*node)->leftBST = (*node)->rightBST = NULL;
+		strcpy((*node)->bookTitle, bookTitle);
+		strcpy((*node)->bookAuthor, bookAuthor);
+		strcpy((*node)->bookISBN, bookISBN);
+		strcpy((*node)->bookPublisher, bookPublisher);
+		strcpy((*node)->bookDescription, bookDescription);
+		(*node)->bookYear = bookYear;
+		(*node)->bookQuantity = bookQuantity;
+		(*node)->isAvailable = isAvailable;
+	}
+	else if (strcmp(bookISBN, (*node)->bookISBN) < 0)
+		insertNodeAVLTree(&(*node)->leftBST, bookTitle, bookAuthor, bookISBN, bookPublisher, bookDescription, bookYear, bookQuantity, isAvailable);
+	else if (strcmp(bookISBN, (*node)->bookISBN) > 0)
+		insertNodeAVLTree(&(*node)->rightBST, bookTitle, bookAuthor, bookISBN, bookPublisher, bookDescription, bookYear, bookQuantity, isAvailable);
 	//Balancing
-
+	balance = balanceFactor(*node);
 	return *node;
 }
 
@@ -400,6 +466,7 @@ void traverseLinkedList()
 		}
 		if (temp == NULL) //Reaching the end of Linked List
 		{
+			//Reset Linked List Position 
 			printf("You Have Reached The End of File!\n");
 			if (navigation == 77)
 			{
@@ -442,7 +509,7 @@ void adminMenu()
 	{
 		system("cls");
 		spacing();
-		printf("\t\t[Logged in as Admin]\n\n1. Search Book\n2. Insert New Book\n3. Update Book Information\n4. Remove Book from Database\n5. View All Book [Debug]\n6. Search Comparison [Debug]\n0. Exit\nChoose [0..4]: ");
+		printf("\t\t[Logged in as Admin]\n\n1. Search Book\n2. Insert New Book\n3. Update Book Information\n4. Remove Book from Database\n5. View All Book [Debug]\n6. Search Comparison [Debug]\n0. Exit\nChoose [0..6]: ");
 		scanf("%d", &menu);
 		rewind(stdin);
 		switch (menu)
