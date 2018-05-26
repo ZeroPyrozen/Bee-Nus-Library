@@ -193,7 +193,7 @@ int balanceFactor(struct Shelf *x)
 {
 	if (x == NULL)
 		return 0;
-	return heightAVL(x->leftAVL) - height(x->rightAVL);
+	return heightAVL(x->leftAVL) - heightAVL(x->rightAVL);
 }
 struct Shelf* insertNodeAVLTree(struct Shelf** node, char bookTitle[], char bookAuthor[], char bookISBN[], char bookPublisher[], char bookDescription[], int bookYear, int bookQuantity, bool isAvailable)
 {
@@ -218,21 +218,22 @@ struct Shelf* insertNodeAVLTree(struct Shelf** node, char bookTitle[], char book
 	else if (strcmp(bookISBN, (*node)->bookISBN) > 0)
 		insertNodeAVLTree(&(*node)->rightBST, bookTitle, bookAuthor, bookISBN, bookPublisher, bookDescription, bookYear, bookQuantity, isAvailable);
 	//Balancing
+	(*node)->height = 1 + maxAVL(heightAVL((*node)->leftAVL), heightAVL((*node)->rightAVL));
 	balance = balanceFactor(*node);
 	return *node;
 }
 
 //Search Logic
-struct Shelf* searchNode(struct Shelf**temp, char bookISBN[])
+struct Shelf* searchISBNNode(struct Shelf**temp, char bookISBN[])
 {
 	if (*temp == NULL)
 		return NULL;
 	else if (strcmp((*temp)->bookISBN, bookISBN) == 0)
 		return *temp;
 	else if (strcmp(bookISBN, (*temp)->bookISBN) < 0)
-		searchNode(&(*temp)->leftBST, bookISBN);
+		searchISBNNode(&(*temp)->leftBST, bookISBN);
 	else if (strcmp(bookISBN, (*temp)->bookISBN) > 0)
-		searchNode(&(*temp)->rightBST, bookISBN);
+		searchISBNNode(&(*temp)->rightBST, bookISBN);
 }
 void addNewBook()
 {
@@ -283,7 +284,7 @@ void addNewBook()
 		else
 		{
 			flag = 1;
-			if (searchNode(&rootBST, bookISBN) == NULL)
+			if (searchISBNNode(&rootBST, bookISBN) == NULL)
 			{
 				length = strlen(bookISBN);
 				for (i = 0; i < length; i++)
@@ -389,7 +390,7 @@ void searchByISBN()
 	}
 	else
 	{
-		temp = searchNode(&rootBST, bookISBN);
+		temp = searchISBNNode(&rootBST, bookISBN);
 		printf("\t\t\t[Search Result]\n");
 		if (temp == NULL)
 			printf("Nothing Found!\nReturning to Admin Menu...\n\nPress \"Enter\" to Continue");
@@ -490,7 +491,7 @@ void traverseLinkedList()
 	} while (navigation != 27);
 }
 
-
+//View Data
 void printAll()
 {
 	int i = 0;
@@ -502,6 +503,150 @@ void printAll()
 		traverseLinkedList();
 }
 
+//Delete Data
+struct Shelf* searchBookName(struct Shelf *node,char keyWord[])
+{
+	if (node != NULL)
+	{
+		if (strstr(node->bookTitle, keyWord) == 0)
+			return node;
+
+	}
+	return NULL;
+}
+struct Shelf* searchAuthorName(struct Shelf** node,char keyWord[])
+{
+	return *node;
+}
+void displayInformation(struct Shelf* temp,int argument,int counter)
+{
+	if (argument == 1)
+	{
+		printf("Title				: %s\n", temp->bookTitle);
+		printf("Author				: %s\n", temp->bookAuthor);
+		printf("ISBN				: %s\n", temp->bookISBN);
+		printf("Publisher			: %s\n", temp->bookPublisher);
+		printf("Description			: \n\n");
+		showDescription(temp->bookDescription);
+		printf("\nPublished Year	: %d\n", temp->bookYear);
+		printf("Book Quantity		: %d\n", temp->bookQuantity);
+		printf("Status				: %s\n", temp->isAvailable ? "Available" : "Borrowed");
+	}
+	else
+	{
+		printf("Title				: %s\n", temp->bookTitle);
+		printf("Author				: %s\n", temp->bookAuthor);
+		printf("ISBN				: %s\n", temp->bookISBN);
+		printf("Publisher			: %s\n", temp->bookPublisher);
+		printf("Description			: \n\n");
+		showDescription(temp->bookDescription);
+		printf("\nPublished Year	: %d\n", temp->bookYear);
+		printf("Book Quantity		: %d\n", temp->bookQuantity);
+		printf("Status				: %s\n", temp->isAvailable ? "Available" : "Borrowed");
+	}
+}
+void deleteData()
+{
+	char keyWord[100],confirmation[100],tempISBN[100][15];
+	struct Shelf *temp;
+	int navigation,counter;
+	bool isFound = false;
+	system("cls");
+	spacing();
+	do
+	{
+		printf("Choose Search Method:\n1. Search by ISBN\n2. Search by Book Name\n3. Search by Author\nChoose: ");
+		scanf("%d", &navigation);
+		rewind(stdin);
+	} while (navigation != 1 && navigation != 2 && navigation !=3);
+	do
+	{
+		printf("Insert Search Query: ");
+		scanf("%[^\n]", &keyWord);
+		rewind(stdin);
+	} while (strlen(keyWord) < 1);
+	temp = NULL;
+	switch (navigation)
+	{
+	case 1:
+		temp = searchISBNNode(&rootBST, keyWord);
+		if (temp != NULL)
+		{
+			displayInformation(temp,navigation,0);
+			isFound = true;
+			do
+			{
+				printf("Type the exact same ISBN to confirm deletion or type \"cancel\" to cancel deletion: ");
+				scanf("%[^\n]", &confirmation);
+				rewind(stdin);
+			} while (strcmp(temp->bookISBN, confirmation) == 0 && _strcmpi(confirmation,"cancel")==0);
+			if (_strcmpi(confirmation, "cancel") != 0)
+			{
+				//Deletion Procedure
+			}
+			else
+				printf("Delete Process is Canceled, Press \"Enter\" to Continue...\n");
+		}
+		else
+		{
+			printf("%s can\'t be found!\nPress \"Enter\" to continue...",keyWord);
+		}
+		getchar();
+		break;
+	case 2:
+		temp = searchBookName(headPQ,keyWord);
+		if (temp != NULL)
+		{
+			isFound = true;
+			counter = 1;
+			strcpy(tempISBN[counter - 1], temp->bookISBN);
+			displayInformation(temp, 2,counter);
+			while (isFound == true)
+			{
+				temp = searchBookName(temp, keyWord);
+				if (temp != NULL)
+				{
+					counter++;
+					strcpy(tempISBN[counter - 1], temp->bookISBN);
+					displayInformation(temp, 2, counter);
+				}
+				else
+					isFound = false;
+			}
+			do
+			{
+				printf("Type the number of data do you wish to delete [1..%d] or type \"0\" if you want to cancel.\nChoose: ",counter);
+				scanf("%d", &navigation);
+				rewind(stdin);
+			} while (navigation < 0||navigation>counter);
+			if (navigation != 0)
+			{
+				temp = searchISBNNode(&rootBST, tempISBN[navigation - 1]);
+				//Deletion
+			}
+			else
+				printf("Delete Process is Canceled, Press \"Enter\" to Continue...\n");
+		}
+		else
+			printf("%s can\'t be found!\nPress \"Enter\" to continue...",keyWord);
+		getchar();
+		break;
+	case 3:
+		break;
+	}
+}
+//Update Data
+void updateData()
+{
+	//Search Data
+	
+	//Delete Data
+
+	//Update Data
+
+	//Reinsertion
+}
+//Menu
 void adminMenu()
 {
 	int menu;
@@ -521,6 +666,7 @@ void adminMenu()
 			addNewBook();
 			break;
 		case 3:
+
 			break;
 		case 4:
 			break;

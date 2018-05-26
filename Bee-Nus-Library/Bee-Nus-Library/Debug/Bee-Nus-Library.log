@@ -1,3 +1,3 @@
 ﻿  Source.cpp
-c:\users\user\documents\github\bee-nus-library\bee-nus-library\bee-nus-library\source.cpp(205): warning C4715: 'searchNode': not all control paths return a value
-c:\users\user\documents\github\bee-nus-library\bee-nus-library\bee-nus-library\source.cpp(166): error C4716: 'rightRotate': must return a value
+c:\users\user\documents\github\bee-nus-library\bee-nus-library\bee-nus-library\source.cpp(237): warning C4715: 'searchISBNNode': not all control paths return a value
+  Bee-Nus-Library.vcxproj -> C:\Users\USER\Documents\GitHub\Bee-Nus-Library\Bee-Nus-Library\Debug\Bee-Nus-Library.exe
