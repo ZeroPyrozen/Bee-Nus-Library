@@ -16,10 +16,7 @@ struct Shelf
 	int bookQuantity;
 	bool isAvailable;
 	int height;
-	struct Shelf *nextPT, *prevPT; //For Linked List Push Tail Only
-	struct Shelf *nextPQ, *prevPQ; //For Linked List Priority Queue
-	struct Shelf *leftBST, *rightBST; //For Binary Search Tree
-	struct Shelf *leftAVL, *rightAVL; //For AVL Tree
+c
 }*rootBST = NULL,*headPQ=NULL,*tailPQ=NULL,*headPT=NULL,*tailPT=NULL,*rootAVL=NULL;
 //Appearance
 void spacing()
@@ -357,8 +354,9 @@ void addNewBook()
 }
 void showDescription(char temp[])
 {
-	int length, i;
+	int length, i,spaceCounter;
 	length = strlen(temp);
+	spaceCounter = 0;
 	for (i = 0; i < length; i++)
 	{
 		if (i == 0)
@@ -368,10 +366,16 @@ void showDescription(char temp[])
 			if(isspace(temp[i]))
 				printf("\n%c", temp[i]);
 			else
-				printf("%c", temp[i]);
+				printf("-\n%c", temp[i]);
 		}
 		else
 			printf("%c",temp[i]);
+		/*
+			Paragraph Example:
+			"	As a Life Management simulation games your 
+			goal is to management many aspect of your character 
+			like pay your land lady,go to college to earn knowledge."
+		*/
 	}
 }
 void searchByISBN()
@@ -545,6 +549,25 @@ void displayInformation(struct Shelf* temp,int argument,int counter)
 		printf("Status				: %s\n", temp->isAvailable ? "Available" : "Borrowed");
 	}
 }
+void deleteLinkedListPT()
+{
+
+
+}
+void popAll()
+{
+	//Pop Linked List 1
+	//Pop Linked List 2
+	//Pop Binary Search Tree
+	//Pop AVL Tree
+	/*
+	struct Shelf *nextPT, *prevPT; //For Linked List Push Tail Only
+	struct Shelf *nextPQ, *prevPQ; //For Linked List Priority Queue
+	struct Shelf *leftBST, *rightBST; //For Binary Search Tree
+	struct Shelf *leftAVL, *rightAVL; //For AVL Tree
+	*/
+
+}
 void deleteData()
 {
 	char keyWord[100],confirmation[100],tempISBN[100][15];
@@ -569,6 +592,7 @@ void deleteData()
 	switch (navigation)
 	{
 	case 1:
+		//Delete by ISBN
 		temp = searchISBNNode(&rootBST, keyWord);
 		if (temp != NULL)
 		{
@@ -583,6 +607,7 @@ void deleteData()
 			if (_strcmpi(confirmation, "cancel") != 0)
 			{
 				//Deletion Procedure
+				//popAll();
 			}
 			else
 				printf("Delete Process is Canceled, Press \"Enter\" to Continue...\n");
@@ -594,6 +619,7 @@ void deleteData()
 		getchar();
 		break;
 	case 2:
+		//Delete by Book Name
 		temp = searchBookName(headPQ,keyWord);
 		if (temp != NULL)
 		{
@@ -632,6 +658,7 @@ void deleteData()
 		getchar();
 		break;
 	case 3:
+		//Delete by Author
 		break;
 	}
 }
